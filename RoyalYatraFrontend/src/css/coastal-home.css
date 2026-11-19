@@ -344,73 +344,7 @@
   .main-nav .nav-cta { margin-top: 14px; }
 }
 @media (max-width: 760px) {
-  .home-support {
-  position: fixed;
-  right: max(clamp(12px, 2vw, 26px), env(safe-area-inset-right));
-  bottom: max(clamp(12px, 2vw, 26px), env(safe-area-inset-bottom));
-  z-index: 40;
-}
-.home-support-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 46px;
-  padding-inline: 15px;
-  border-radius: 999px;
-  background: var(--forest-deep);
-  box-shadow: 0 4px 18px rgb(10 61 98 / .24);
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 650;
-  list-style: none;
-}
-.home-support-toggle::-webkit-details-marker { display: none; }
-.home-support-toggle:hover { background: var(--forest); }
-.home-support:not([open]) .home-support-close-icon,
-.home-support[open] .home-support-chat-icon { display: none; }
-.home-support-links {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 10px);
-  display: grid;
-  gap: 3px;
-  width: min(208px, calc(100vw - 32px));
-  padding: 7px;
-  border: 1px solid #e3e7e8;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 8px 24px rgb(10 61 98 / .16);
-}
-.home-support-link {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 9px;
-  min-height: 44px;
-  padding: 5px 8px;
-  border-radius: 8px;
-  color: var(--forest-deep);
-  font-size: 14px;
-  font-weight: 600;
-}
-.home-support-link:hover { background: #edf3f4; }
-.home-support-link:focus-visible { outline-offset: -2px; }
-.home-support-icon {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--support-icon-bg);
-  color: #fff;
-}
-.home-support-icon svg { width: 21px; height: 21px; }
-.home-support-icon-whatsapp { --support-icon-bg: #087f50; }
-.home-support-icon-line { --support-icon-bg: #008a3d; }
-.home-support-icon-instagram { --support-icon-bg: #b22770; }
-
-.coastal-hero { min-height: 570px; }
+  .coastal-hero { min-height: 570px; }
   .coastal-hero::before { background: linear-gradient(90deg, rgb(5 42 57 / .86), rgb(5 42 57 / .42)), linear-gradient(0deg, rgb(4 30 43 / .24), transparent 50%); }
   .coastal-hero-content { padding-top: 66px; padding-bottom: 102px; }
   .coastal-hero-note { right: 20px; bottom: 90px; }
@@ -442,73 +376,7 @@
   .site-header { min-height: 66px; }
   .brand-logo { width: 125px; }
   .header-booking { min-height: 39px; padding-inline: 11px; font-size: 11px; }
-  .home-support {
-  position: fixed;
-  right: max(clamp(12px, 2vw, 26px), env(safe-area-inset-right));
-  bottom: max(clamp(12px, 2vw, 26px), env(safe-area-inset-bottom));
-  z-index: 40;
-}
-.home-support-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 46px;
-  padding-inline: 15px;
-  border-radius: 999px;
-  background: var(--forest-deep);
-  box-shadow: 0 4px 18px rgb(10 61 98 / .24);
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 650;
-  list-style: none;
-}
-.home-support-toggle::-webkit-details-marker { display: none; }
-.home-support-toggle:hover { background: var(--forest); }
-.home-support:not([open]) .home-support-close-icon,
-.home-support[open] .home-support-chat-icon { display: none; }
-.home-support-links {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 10px);
-  display: grid;
-  gap: 3px;
-  width: min(208px, calc(100vw - 32px));
-  padding: 7px;
-  border: 1px solid #e3e7e8;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 8px 24px rgb(10 61 98 / .16);
-}
-.home-support-link {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 9px;
-  min-height: 44px;
-  padding: 5px 8px;
-  border-radius: 8px;
-  color: var(--forest-deep);
-  font-size: 14px;
-  font-weight: 600;
-}
-.home-support-link:hover { background: #edf3f4; }
-.home-support-link:focus-visible { outline-offset: -2px; }
-.home-support-icon {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--support-icon-bg);
-  color: #fff;
-}
-.home-support-icon svg { width: 21px; height: 21px; }
-.home-support-icon-whatsapp { --support-icon-bg: #087f50; }
-.home-support-icon-line { --support-icon-bg: #008a3d; }
-.home-support-icon-instagram { --support-icon-bg: #b22770; }
-
-.coastal-hero { min-height: 540px; }
+  .coastal-hero { min-height: 540px; }
   .coastal-hero-image { object-position: 58% center; }
   .coastal-hero-content { padding-inline: 20px; }
   .coastal-hero h1 { font-size: clamp(48px, 12vw, 64px); }
