@@ -1,3 +1,4 @@
+import Breadcrumbs from './Breadcrumbs.jsx'
 import { useMemo, useState } from 'react'
 import {
   destinationCityPages,
@@ -6,9 +7,7 @@ import {
   destinationStatePages,
   featuredDestinationPaths,
 } from '../../seo/destinationDirectory.js'
-import { getLandingStructuredData } from '../../seo/structuredData.js'
 import { findTravelPage, getLandingAction } from '../../seo/travelPages.js'
-import { getPageBreadcrumbs } from '../../seo/seoLandingPages.js'
 
 function DestinationCard({ page, label }) {
   return (
@@ -37,8 +36,6 @@ function RegionCard({ region }) {
 
 export default function DestinationDirectoryPage({ page, tours, error, loading }) {
   const [query, setQuery] = useState('')
-  const breadcrumbs = getPageBreadcrumbs(page, findTravelPage)
-  const schema = getLandingStructuredData(page, import.meta.env.VITE_SITE_URL, findTravelPage)
   const action = getLandingAction(page)
   const searchResults = useMemo(() => {
     const term = query.trim().toLocaleLowerCase()
@@ -53,17 +50,7 @@ export default function DestinationDirectoryPage({ page, tours, error, loading }
 
   return (
     <article className="destination-directory">
-      <nav className="seo-breadcrumbs" aria-label="Breadcrumb">
-        <ol>
-          {breadcrumbs.map((breadcrumb, index) => (
-            <li key={breadcrumb.path}>
-              {index === breadcrumbs.length - 1
-                ? <span aria-current="page">{breadcrumb.label}</span>
-                : <a href={breadcrumb.path}>{breadcrumb.label}</a>}
-            </li>
-          ))}
-        </ol>
-      </nav>
+      <Breadcrumbs page={page} />
 
       <section className="directory-hero">
         <div>
@@ -72,7 +59,7 @@ export default function DestinationDirectoryPage({ page, tours, error, loading }
           <p>{page.intro}</p>
           <a className="button button-orange" href={action.href}>{action.label} <span aria-hidden="true">&#8599;</span></a>
         </div>
-        <img src="/amber-fort-hero.png" alt={page.heroAlt} fetchPriority="high" />
+        <img src="/amber-fort-hero.webp" alt={page.heroAlt} fetchPriority="high" />
       </section>
 
       <section className="section directory-search-section">
@@ -173,11 +160,6 @@ export default function DestinationDirectoryPage({ page, tours, error, loading }
         <a className="button button-light" href={action.href}>{action.label}</a>
       </section>
 
-      {schema && (
-        <script type="application/ld+json">
-          {JSON.stringify(schema).replace(/</g, '\\u003c')}
-        </script>
-      )}
     </article>
   )
 }

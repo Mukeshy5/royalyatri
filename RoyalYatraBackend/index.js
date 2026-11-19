@@ -1,6 +1,7 @@
 const crypto = require('node:crypto')
 const fs = require('node:fs/promises')
 const path = require('node:path')
+const compression = require('compression')
 const cors = require('cors')
 require('dotenv').config()
 const express = require('express')
@@ -64,6 +65,7 @@ const packages = [
 
 app.disable('x-powered-by')
 app.use(helmet())
+app.use(compression())
 app.use(cors({
   origin(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true)

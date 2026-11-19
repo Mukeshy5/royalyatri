@@ -38,7 +38,7 @@ const featuredTours = [
     description: 'Plan a seven-day Rajasthan tour through Jaipur, Jodhpur and Udaipur, from Amber Fort and Mehrangarh to the lakes of Udaipur.',
     intro: 'Follow Rajasthan’s palace cities from the pink lanes of Jaipur to Jodhpur’s blue neighbourhoods and Udaipur’s lakeside streets.',
     route: 'Jaipur, Jodhpur, Udaipur',
-    heroImage: '/amber-fort-hero.png',
+    heroImage: '/amber-fort-hero.webp',
     heroAlt: 'Amber Fort, Jaipur, set on a hillside overlooking the water',
     itinerary: [
       ['Arrive in Jaipur', 'Check in and explore the old city at an easy pace. Stop for a look at Hawa Mahal and choose a nearby bazaar.'],
@@ -154,7 +154,7 @@ const featuredTours = [
     description: 'Discover a Jaipur tour with Amber Fort, City Palace, Hawa Mahal, bazaars and local Rajasthani experiences.',
     intro: 'Spend two or three days exploring Jaipur’s forts, palaces and colourful old city at a comfortable pace.',
     route: 'Jaipur',
-    heroImage: '/amber-fort-hero.png',
+    heroImage: '/amber-fort-hero.webp',
     heroAlt: 'Amber Fort and palace walls above Jaipur',
     itinerary: [
       ['Arrive in Jaipur', 'Settle into the city and take an easy evening walk around a nearby market or hotel neighbourhood.'],

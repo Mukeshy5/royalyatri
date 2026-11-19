@@ -1,5 +1,5 @@
-import { getPackageCatalogLink, getPageBreadcrumbs } from '../../seo/seoLandingPages.js'
-import { getLandingStructuredData } from '../../seo/structuredData.js'
+import Breadcrumbs from './Breadcrumbs.jsx'
+import { getPackageCatalogLink } from '../../seo/seoLandingPages.js'
 import { findTravelPage, getLandingAction } from '../../seo/travelPages.js'
 
 function imageUrl(image) {
@@ -10,8 +10,6 @@ function imageUrl(image) {
 function LandingPage({ page, audienceLabel }) {
   const action = getLandingAction(page)
   const packageLink = getPackageCatalogLink(page)
-  const breadcrumbs = getPageBreadcrumbs(page, findTravelPage)
-  const schema = getLandingStructuredData(page, import.meta.env.VITE_SITE_URL, findTravelPage)
   const travelFacts = [
     ['Nearest airport', page.airport],
     ['Nearest railway station', page.railway],
@@ -21,17 +19,7 @@ function LandingPage({ page, audienceLabel }) {
 
   return (
     <article className="seo-landing-page">
-      <nav className="seo-breadcrumbs" aria-label="Breadcrumb">
-        <ol>
-          {breadcrumbs.map((breadcrumb, index) => (
-            <li key={breadcrumb.path}>
-              {index === breadcrumbs.length - 1
-                ? <span aria-current="page">{breadcrumb.label}</span>
-                : <a href={breadcrumb.path}>{breadcrumb.label}</a>}
-            </li>
-          ))}
-        </ol>
-      </nav>
+      <Breadcrumbs page={page} />
 
       <section className="seo-landing-hero">
         <div className="seo-landing-hero-copy">
@@ -94,7 +82,7 @@ function LandingPage({ page, audienceLabel }) {
 
       <section className="section seo-package-section">
         <div>
-          <span className="eyebrow">PLAN WITH ROYAL YATRA</span>
+          <span className="eyebrow">PLAN WITH ROYAL YATRI</span>
           <h2>Tour packages and experiences</h2>
           <p>{page.tourInfo}</p>
           <a className="button button-dark" href={packageLink.href}>{packageLink.label}</a>
@@ -133,11 +121,6 @@ function LandingPage({ page, audienceLabel }) {
         </section>
       )}
 
-      {schema && (
-        <script type="application/ld+json">
-          {JSON.stringify(schema).replace(/</g, '\\u003c')}
-        </script>
-      )}
     </article>
   )
 }

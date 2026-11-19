@@ -25,6 +25,8 @@ export const redirects = {
   '/destinations-in-india/kerala/munnar': '/destinations/kerala/munnar',
   '/destinations-in-india/kerala/alleppey': '/destinations/kerala/alleppey',
   '/destinations': '/destinations-in-india',
+  '/industries': '/india',
+  '/enquire': '/contact',
   '/states/rajasthan': '/destinations-in-india/rajasthan',
   '/destinations/varanasi': '/destinations-in-india/uttar-pradesh/varanasi',
   '/tours': packagesPath,
@@ -113,7 +115,7 @@ const registeredPages = [
   {
     path: onlinePaymentPath,
     title: 'Online payment',
-    description: 'For a confirmed booking, contact Royal Yatra with your booking reference to request payment instructions.',
+    description: 'For a confirmed booking, contact Royal Yatri with your booking reference to request payment instructions.',
     action: { href: '/contact', label: 'Ask about payment' },
     links: [],
   },

@@ -21,6 +21,7 @@ import { destinationRegionPath, destinationRegions } from '../seo/destinationDir
 import HomeSupport from './HomeSupport.jsx'
 import DestinationMenu from './layout/DestinationMenu.jsx'
 import IndiaMenu from './layout/IndiaMenu.jsx'
+import Breadcrumbs from './seo-pages/Breadcrumbs.jsx'
 import TourPackageMenu from './layout/TourPackageMenu.jsx'
 import { TourPackageLinks } from './seo-pages/TourPackageLanding.jsx'
 import { featuredTourPackages } from '../seo/featuredTourPackages.js'
@@ -33,6 +34,7 @@ import {
   priorityTourPackagePages,
 } from '../seo/travelPages.js'
 
+const homeHeroImage = 'photo-1551632811-561732d1e306'
 const currentYear = new Date().getFullYear()
 const earliestTravelDate = new Date().toISOString().slice(0, 10)
 
@@ -76,8 +78,8 @@ function Header({ pathname }) {
 
   return (
     <header className="site-header">
-      <a className="brand" href="/" aria-label="Royal Yatra home">
-        <img className="brand-logo" src="/logo.png" alt="Royal Yatra" />
+      <a className="brand" href="/" aria-label="Royal Yatri home">
+        <img className="brand-logo" src="/logo.webp" width={360} height={120} alt="Royal Yatri" />
       </a>
       <button
         type="button"
@@ -131,7 +133,7 @@ function Footer() {
     <footer className="site-footer">
       <div className="footer-main">
         <div className="footer-about">
-          <a className="brand brand-footer" href="/"><img className="brand-logo" src="/logo.png" alt="Royal Yatra" /></a>
+          <a className="brand brand-footer" href="/"><img className="brand-logo" src="/logo.webp" width={360} height={120} alt="Royal Yatri" /></a>
           <p>India, a little closer. We make thoughtful journeys for curious people.</p>
         </div>
         <div className="footer-column">
@@ -161,7 +163,7 @@ function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>&copy; {currentYear} Royal Yatra.</span>
+        <span>&copy; {currentYear} Royal Yatri.</span>
         <div><a href="/faq">FAQs</a><a href="/contact">Get in touch</a></div>
       </div>
     </footer>
@@ -403,7 +405,7 @@ function NewsletterSignup({ apiUrl }) {
       <form className="newsletter-form" onSubmit={subscribe}>
         <label>Your name<input name="name" autoComplete="name" required minLength="2" maxLength="80" placeholder="How should we address you?" /></label>
         <label>Email address<input name="email" type="email" autoComplete="email" required maxLength="254" placeholder="you@example.com" /></label>
-        <label className="newsletter-consent"><input name="consent" type="checkbox" required /> <span>I’m happy for Royal Yatra to contact me about travel updates.</span></label>
+        <label className="newsletter-consent"><input name="consent" type="checkbox" required /> <span>I’m happy for Royal Yatri to contact me about travel updates.</span></label>
         {message && <p className={'form-message form-message-' + (status === 'error' ? 'error' : 'success')} role="status">{message}</p>}
         <button className="button button-orange" type="submit" disabled={status === 'submitting'}>
           {status === 'submitting' ? 'Sending request…' : 'Request updates'} <ArrowRight size={17} aria-hidden="true" />
@@ -452,18 +454,20 @@ export function HomePage({ tours, error, loading, apiUrl = '/api' }) {
     <LazyMotion features={domAnimation}>
       <div className="coastal-home">
       <section className="coastal-hero" aria-labelledby="hero-title">
-        <img className="coastal-hero-image" src={imageUrl('photo-1551632811-561732d1e306', 2000)} alt="Travellers walking together through a dramatic mountain landscape" fetchPriority="high" />
+        <img className="coastal-hero-image" src={imageUrl(homeHeroImage, 1440)}
+          srcSet={[640, 960, 1440, 1920].map((width) => imageUrl(homeHeroImage, width) + ' ' + width + 'w').join(', ')}
+          sizes="100vw" alt="Travellers walking together through a dramatic mountain landscape" fetchPriority="high" />
         <div className="coastal-hero-content">
-          <m.div {...revealProps}>
+          <div>
             <span className="coastal-hero-badge"><Sparkles size={14} aria-hidden="true" /> TRAVEL <i /> EXPLORE <i /> DISCOVER</span>
             <p className="coastal-hero-kicker">The world, on your terms</p>
-            <h1 id="hero-title">Explore the world<br /><em>with us.</em></h1>
-            <p className="coastal-hero-description">Discover remarkable places, thoughtfully made journeys and the little moments you’ll remember long after you’re home.</p>
+            <h1 id="hero-title">India tours<br /><em>made for you.</em></h1>
+            <p className="coastal-hero-description">Explore India with private tours, family holidays and tailor-made itineraries. Plan a trip at your pace, from forts in Rajasthan to backwaters in Kerala.</p>
             <div className="home-hero-actions">
-              <a className="button button-orange" href={packagesPath}>Find your journey <ArrowUpRight size={17} aria-hidden="true" /></a>
+              <a className="button button-orange" href={packagesPath}>Explore India tour packages <ArrowUpRight size={17} aria-hidden="true" /></a>
               <a className="coastal-hero-link" href="/destinations-in-india">Explore destinations <ArrowDown size={16} aria-hidden="true" /></a>
             </div>
-          </m.div>
+          </div>
         </div>
         <div className="coastal-hero-note"><MapPin size={15} aria-hidden="true" /> The Himalayas, India</div>
       </section>
@@ -543,7 +547,7 @@ export function HomePage({ tours, error, loading, apiUrl = '/api' }) {
       </m.section>
 
       <section className="section coastal-why" id="why-royal-yatra">
-        <SectionHeading eyebrow="THE ROYAL YATRA DIFFERENCE" title="Travel, with the details taken care of." copy="A little local insight and a lot of thoughtful planning make room for the moments that matter." />
+        <SectionHeading eyebrow="THE ROYAL YATRI DIFFERENCE" title="Travel, with the details taken care of." copy="A little local insight and a lot of thoughtful planning make room for the moments that matter." />
         <div className="coastal-why-grid">
           <article><span><MapPin size={21} aria-hidden="true" /></span><h3>Local perspective</h3><p>Thoughtful recommendations help you connect with the places and people you meet.</p></article>
           <article><span><Check size={21} aria-hidden="true" /></span><h3>Clear from the start</h3><p>Review your itinerary and trip details before you decide what works for you.</p></article>
@@ -675,7 +679,8 @@ export function ToursPage({ tours, error, loading, search }) {
 
   return (
     <>
-      <PageHero eyebrow="JOURNEYS ACROSS INDIA" title={page.title} copy={page.description} image="/amber-fort-hero.png" />
+      <Breadcrumbs page={page} />
+      <PageHero eyebrow="JOURNEYS ACROSS INDIA" title={page.title} copy={page.description} image="/amber-fort-hero.webp" />
       <section className="section page-section">
         <nav className="category-links" aria-label="Other India tour packages">
           {relatedTrips.map(({ path, title }) => <a key={path} href={path}>{title} <Arrow diagonal /></a>)}
@@ -706,8 +711,8 @@ export function ToursPage({ tours, error, loading, search }) {
 export function AboutPage() {
   return (
     <>
-      <PageHero eyebrow="A LITTLE ABOUT US" title={<>Travel that feels<br /><em>like you.</em></>}
-        copy="We're a small team of curious people who believe the best way to know India is to take your time." image="/amber-fort-hero.png" />
+      <PageHero eyebrow="A LITTLE ABOUT US" title={<>Meet your India<br /><em>travel team.</em></>}
+        copy="We're a small team of curious people who believe the best way to know India is to take your time." image="/amber-fort-hero.webp" />
       <section className="story-section about-story">
         <div className="story-image">
           <img src={imageUrl('photo-1599661046827-dacff0c0f09a', 1100)} alt="Ornate architecture in Jaipur" loading="lazy" />
@@ -715,7 +720,7 @@ export function AboutPage() {
         <div className="story-copy">
           <span className="eyebrow">WHY WE DO THIS</span>
           <h2>Good travel is<br /><em>all about people.</em></h2>
-          <p>Royal Yatra started with a simple idea: travel should open doors, not just tick boxes. Today, we bring together local hosts, thoughtful planners and travellers ready to look a little closer.</p>
+          <p>Royal Yatri started with a simple idea: travel should open doors, not just tick boxes. Today, we bring together local hosts, thoughtful planners and travellers ready to look a little closer.</p>
           <p>We make the plans. You make the memories. And if the best bit is the unplanned chai stop along the way, we'll call that a win.</p>
           <a className="text-link" href="/contact">Let's plan something <Arrow /></a>
         </div>
@@ -772,8 +777,8 @@ export function ContactPage({ search, apiUrl }) {
 
   return (
     <>
-      <PageHero eyebrow="LET'S TALK ABOUT YOUR TRIP" title={<>A good journey<br />starts with <em>hello.</em></>}
-        copy="Tell us what you're dreaming up. A real person from our team will help you find your way." image="/amber-fort-hero.png" />
+      <PageHero eyebrow="LET'S TALK ABOUT YOUR TRIP" title={<>Plan your<br /><em>India trip.</em></>}
+        copy="Tell us what you're dreaming up. A real person from our team will help you find your way." image="/amber-fort-hero.webp" />
       <section className="section contact-section">
         <div className="contact-intro">
           <span className="eyebrow">WE'RE ALL EARS</span>
@@ -826,8 +831,8 @@ const faqs = [
 export function FAQPage() {
   return (
     <>
-      <PageHero eyebrow="THE LITTLE DETAILS" title={<>A few things<br />you might <em>wonder.</em></>}
-        copy="The practical bits, answered. Still curious? We are only a message away." image="/amber-fort-hero.png" />
+      <PageHero eyebrow="THE LITTLE DETAILS" title={<>India tour<br /><em>planning FAQs.</em></>}
+        copy="The practical bits, answered. Still curious? We are only a message away." image="/amber-fort-hero.webp" />
       <section className="section faq-section">
         <div className="faq-heading">
           <span className="eyebrow">GOOD TO KNOW</span>

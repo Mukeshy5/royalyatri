@@ -55,7 +55,6 @@ export const tourPackagePages = [
   },
   {
     path: '/private-tours-india',
-    canonicalPath: '/private-tours-in-india',
     title: 'Private Tours in India: Guides and Day Routes',
     description: 'Plan private sightseeing by city, with time for local guides, monuments and transfers that suit your group.',
     requestLabel: 'Request a private tour',
@@ -90,7 +89,6 @@ export const tourPackagePages = [
   },
   {
     path: privateToursPath,
-    canonicalPath: '/private-tours-in-india',
     title: 'Private India Tours: Multi-City Itineraries',
     description: 'Build a private route between cities with accommodation choices, travel days and activities planned around your own group.',
     requestLabel: 'Request a private tour',

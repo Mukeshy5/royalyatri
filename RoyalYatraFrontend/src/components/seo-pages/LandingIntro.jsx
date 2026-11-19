@@ -9,12 +9,13 @@ import {
   IndiaTourismLandingPage,
   StateDestinationLandingPage,
 } from './LandingPages.jsx'
+import Breadcrumbs from './Breadcrumbs.jsx'
 import DestinationDirectoryPage from './DestinationDirectory.jsx'
 import TourPackageLanding from './TourPackageLanding.jsx'
 
 export default function LandingIntro({ page, tours, error, loading }) {
   if (page.pageType === 'tour') {
-    return <TourPackageLanding page={page} siteUrl={import.meta.env.VITE_SITE_URL} />
+    return <TourPackageLanding page={page} />
   }
 
   if (page.pageType === 'directory') {
@@ -41,6 +42,7 @@ export default function LandingIntro({ page, tours, error, loading }) {
 
   return (
     <>
+      <Breadcrumbs page={page} />
       <section className={`page-hero travel-hero${page.path.startsWith(internationalPath) ? ' travel-hero-world' : ''}`}>
         <h1>{page.title}</h1>
         <p>{page.description}</p>
@@ -63,7 +65,7 @@ export default function LandingIntro({ page, tours, error, loading }) {
               return (
                 <a href={path} key={path}>
                   <strong>{link?.title ?? path}</strong>
-                  <span aria-hidden="true">?</span>
+                  <span aria-hidden="true">&#8599;</span>
                 </a>
               )
             })}

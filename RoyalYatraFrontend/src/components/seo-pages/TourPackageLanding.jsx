@@ -1,7 +1,5 @@
-import React from 'react'
+import Breadcrumbs from './Breadcrumbs.jsx'
 import { featuredTourPackages } from '../../seo/featuredTourPackages.js'
-import { getPageBreadcrumbs } from '../../seo/seoLandingPages.js'
-import { getLandingStructuredData } from '../../seo/structuredData.js'
 import { findTravelPage, getLandingAction } from '../../seo/travelPages.js'
 
 export function TourPackageLinks({ heading, packages }) {
@@ -22,24 +20,14 @@ export function TourPackageLinks({ heading, packages }) {
   )
 }
 
-export default function TourPackageLanding({ page, siteUrl }) {
+export default function TourPackageLanding({ page }) {
   const action = getLandingAction(page)
-  const breadcrumbs = getPageBreadcrumbs(page, findTravelPage)
   const related = featuredTourPackages.filter(({ path }) => path !== page.path)
-  const structuredData = getLandingStructuredData(page, siteUrl, findTravelPage)
   const credit = page.heroCredit
 
   return (
     <article className="tour-package-page">
-      <nav className="seo-breadcrumbs" aria-label="Breadcrumb">
-        <ol>
-          {breadcrumbs.map(({ label, path }) => (
-            <li key={path}>
-              {path === page.path ? <span aria-current="page">{label}</span> : <a href={path}>{label}</a>}
-            </li>
-          ))}
-        </ol>
-      </nav>
+      <Breadcrumbs page={page} />
       <section className="section tour-package-hero">
         <div className="tour-package-hero-copy">
           <h1>{page.title}</h1>
@@ -93,10 +81,6 @@ export default function TourPackageLanding({ page, siteUrl }) {
         </div>
       </section>
       <TourPackageLinks heading="Explore more tours" packages={related} />
-      {structuredData && React.createElement('script', {
-        type: 'application/ld+json',
-        dangerouslySetInnerHTML: { __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') },
-      })}
     </article>
   )
 }

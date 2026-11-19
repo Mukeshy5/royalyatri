@@ -1,71 +1,127 @@
-import { canonicalUrl } from './canonical.js'
+import { supportEmail, supportWhatsAppNumber, supportWhatsAppUrl } from '../contactDetails.js'
+import { canonicalUrl, siteLanguage, siteName } from './canonical.js'
 import { getPageBreadcrumbs } from './seoLandingPages.js'
+import { findTravelPage, packagesPath } from './travelPages.js'
 
-export function getLandingStructuredData(page, siteUrl, findPage) {
-  const pageUrl = canonicalUrl(page.canonicalPath ?? page.path, siteUrl)
-  if (!pageUrl) return undefined
+const organization = { '@id': canonicalUrl('/#organization') }
+const website = { '@id': canonicalUrl('/#website') }
+const destinationTypes = new Set(['destination', 'region', 'state', 'city', 'india'])
 
-  const imageUrl = page.heroImage.startsWith('/')
-    ? canonicalUrl(page.heroImage, siteUrl)
-    : 'https://images.unsplash.com/' + page.heroImage + '?auto=format&fit=crop&w=1200&q=85'
-  const breadcrumbs = getPageBreadcrumbs(page, findPage)
+export function getStructuredData(pathname, metadata) {
+  if (!metadata.canonical) return undefined
+
+  const page = findTravelPage(pathname)
+  const url = canonicalUrl(pathname)
+  const pageId = url + '#webpage'
+  const webPage = {
+    '@type': pathname === '/about' ? 'AboutPage' : pathname === '/contact' ? 'ContactPage' : 'WebPage',
+    '@id': pageId,
+    url,
+    name: page?.title ?? metadata.title,
+    description: metadata.description,
+    primaryImageOfPage: { '@type': 'ImageObject', url: metadata.image },
+    isPartOf: website,
+    publisher: organization,
+    inLanguage: siteLanguage,
+  }
   const graph = [
     {
-      '@type': 'WebPage',
-      '@id': pageUrl + '#webpage',
-      url: pageUrl,
-      name: page.title,
-      description: page.description,
-      primaryImageOfPage: { '@type': 'ImageObject', url: imageUrl },
-      inLanguage: 'en',
+      '@type': ['Organization', 'TravelAgency'],
+      ...organization,
+      name: siteName,
+      url: canonicalUrl('/'),
+      logo: { '@type': 'ImageObject', url: canonicalUrl('/logo.png') },
+      email: supportEmail,
+      telephone: supportWhatsAppNumber.replaceAll(' ', ''),
+      areaServed: { '@type': 'Country', name: 'India' },
+      contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: supportWhatsAppUrl, availableLanguage: 'English' },
+      sameAs: ['https://www.instagram.com/royalyatri1/'],
     },
-    ...(['destination', 'attraction', 'region', 'state', 'city'].includes(page.pageType) || page.path === '/india'
-      ? [{
-          '@type': page.pageType === 'attraction' ? 'TouristAttraction' : 'TouristDestination',
-          '@id': pageUrl + '#place',
-          name: page.breadcrumbLabel ?? page.title,
-          description: page.description,
-          image: imageUrl,
-          url: pageUrl,
-          ...(page.parentPath && findPage(page.parentPath)
-            ? { containedInPlace: { '@type': 'TouristDestination', name: findPage(page.parentPath).title } }
-            : {}),
-        }]
-      : []),
-    ...(page.pageType === 'foreign'
-      ? [{
-          '@type': 'Service',
-          '@id': pageUrl + '#travel-service',
-          name: page.title,
-          description: page.description,
-          url: pageUrl,
-          provider: { '@type': 'TravelAgency', name: 'Royal Yatra', url: canonicalUrl('/', siteUrl) },
-          areaServed: { '@type': 'Country', name: 'India' },
-        }]
-      : []),
-    ...(page.pageType === 'guide'
-      ? [{
-          '@type': 'Article',
-          '@id': pageUrl + '#article',
-          headline: page.title,
-          description: page.description,
-          image: imageUrl,
-          mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
-          author: { '@type': 'Organization', name: 'Royal Yatra' },
-          publisher: { '@type': 'Organization', name: 'Royal Yatra' },
-          inLanguage: 'en',
-        }]
-      : []),
     {
+      '@type': 'WebSite',
+      ...website,
+      name: siteName,
+      url: canonicalUrl('/'),
+      publisher: organization,
+      inLanguage: siteLanguage,
+    },
+    webPage,
+  ]
+
+  if (page) {
+    const breadcrumbs = getPageBreadcrumbs(page, findTravelPage)
+    const breadcrumbId = url + '#breadcrumb'
+    webPage.breadcrumb = { '@id': breadcrumbId }
+    graph.push({
       '@type': 'BreadcrumbList',
-      itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+      '@id': breadcrumbId,
+      itemListElement: breadcrumbs.map(({ label, path }, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        name: breadcrumb.label,
-        item: breadcrumb.path === page.path ? pageUrl : canonicalUrl(breadcrumb.path, siteUrl),
+        name: label,
+        item: canonicalUrl(path),
       })),
-    },
-  ]
+    })
+
+    const entity = {
+      name: page.title,
+      description: metadata.description,
+      url,
+      image: metadata.image,
+    }
+    if (destinationTypes.has(page.pageType) || page.path === '/india' || page.pageType === 'attraction') {
+      graph.push({
+        '@type': page.pageType === 'attraction' ? 'TouristAttraction' : 'TouristDestination',
+        '@id': url + '#destination',
+        ...entity,
+        name: page.breadcrumbLabel ?? page.title,
+      })
+      webPage.mainEntity = { '@id': url + '#destination' }
+    }
+    if (page.pageType === 'tour') {
+      graph.push({
+        '@type': 'TouristTrip',
+        '@id': url + '#trip',
+        ...entity,
+        provider: organization,
+        itinerary: {
+          '@type': 'ItemList',
+          itemListElement: page.itinerary.map(([name, description], index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name,
+            description,
+          })),
+        },
+      })
+      webPage.mainEntity = { '@id': url + '#trip' }
+    }
+    if (page.pageType === 'foreign') {
+      graph.push({
+        '@type': 'Service',
+        '@id': url + '#travel-service',
+        ...entity,
+        provider: organization,
+        areaServed: { '@type': 'Country', name: 'India' },
+      })
+      webPage.mainEntity = { '@id': url + '#travel-service' }
+    }
+    if (page.pageType === 'guide') {
+      graph.push({
+        '@type': 'Article',
+        '@id': url + '#article',
+        headline: page.title,
+        description: metadata.description,
+        image: metadata.image,
+        mainEntityOfPage: { '@id': pageId },
+        author: organization,
+        publisher: organization,
+        inLanguage: siteLanguage,
+      })
+      webPage.mainEntity = { '@id': url + '#article' }
+    }
+    if (page.path === packagesPath || page.pageType === 'directory') webPage['@type'] = 'CollectionPage'
+  }
 
   return { '@context': 'https://schema.org', '@graph': graph }
 }

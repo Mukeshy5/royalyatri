@@ -1,17 +1,7 @@
-export function canonicalUrl(pathname, siteUrl) {
-  if (!siteUrl?.trim()) return undefined
+export const siteOrigin = 'https://royalyatri.com'
+export const siteName = 'Royal Yatri'
+export const siteLanguage = 'en'
 
-  const origin = new URL(siteUrl.trim())
-  if (
-    !['http:', 'https:'].includes(origin.protocol) ||
-    origin.pathname !== '/' ||
-    origin.username ||
-    origin.password ||
-    origin.search ||
-    origin.hash
-  ) {
-    throw new Error('SITE_URL must be an HTTP or HTTPS origin.')
-  }
-
-  return new URL(pathname, origin).href
+export function canonicalUrl(pathname) {
+  return new URL(pathname, siteOrigin).href
 }

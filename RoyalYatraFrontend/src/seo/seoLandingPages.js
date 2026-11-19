@@ -134,7 +134,7 @@ export const seoLandingPages = [
     title: 'Jaipur Travel Guide: Forts, Palaces and Old City',
     description: 'Plan a Jaipur trip around Amber Fort, City Palace, historic neighbourhoods and practical travel advice for Rajasthan.',
     intro: 'Jaipur combines a planned historic centre with hilltop forts, palace buildings and active markets. Give the city more than a quick photo stop to balance the old city with sights outside it.',
-    heroImage: '/amber-fort-hero.png',
+    heroImage: '/amber-fort-hero.webp',
     heroAlt: 'Illustration of Amber Fort in the hills outside Jaipur',
     highlights: [
       { title: 'Amber Fort', detail: 'Set aside a separate visit for the fort complex and its hillside setting outside central Jaipur.' },
@@ -158,7 +158,7 @@ export const seoLandingPages = [
     title: 'Amber Fort Jaipur Visitor and Travel Guide',
     description: 'Plan an Amber Fort visit near Jaipur with practical advice on the fort complex, best season, transport and nearby sights.',
     intro: 'Amber Fort rises above the landscape north of Jaipur. Allow time for the approach and the fort’s courtyards, gates and interior spaces rather than treating it as a brief stop on a city tour.',
-    heroImage: '/amber-fort-hero.png',
+    heroImage: '/amber-fort-hero.webp',
     heroAlt: 'Illustration of Amber Fort above Maota Lake near Jaipur',
     highlights: [
       { title: 'Courtyards and gateways', detail: 'The route through the complex reveals changes in scale and purpose from one courtyard to another.' },
