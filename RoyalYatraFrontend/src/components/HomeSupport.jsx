@@ -1,7 +1,8 @@
 import React from 'react'
+import { supportWhatsAppUrl } from '../contactDetails.js'
 
 const supportLinks = [
-  { id: 'whatsapp', label: 'WhatsApp', href: 'https://wa.me/919899241803' },
+  { id: 'whatsapp', label: 'WhatsApp', href: supportWhatsAppUrl },
   { id: 'line', label: 'LINE', href: 'https://line.me/ti/p/FfuXwWnvjQ' },
   { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/royalyatri1?lqvp=a3R1OXVhMHgxZDQ5' },
 ]

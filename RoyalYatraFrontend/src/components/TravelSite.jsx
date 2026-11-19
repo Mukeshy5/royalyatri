@@ -16,9 +16,11 @@ import Search from 'lucide-react/icons/search'
 import ShieldCheck from 'lucide-react/icons/shield-check'
 import Sparkles from 'lucide-react/icons/sparkles'
 import Users from 'lucide-react/icons/users'
+import { supportEmail, supportEmailUrl, supportWhatsAppNumber, supportWhatsAppUrl } from '../contactDetails.js'
 import { destinationRegionPath, destinationRegions } from '../seo/destinationDirectory.js'
 import HomeSupport from './HomeSupport.jsx'
 import DestinationMenu from './layout/DestinationMenu.jsx'
+import IndiaMenu from './layout/IndiaMenu.jsx'
 import TourPackageMenu from './layout/TourPackageMenu.jsx'
 import { TourPackageLinks } from './seo-pages/TourPackageLanding.jsx'
 import { featuredTourPackages } from '../seo/featuredTourPackages.js'
@@ -38,6 +40,7 @@ const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Packages', href: packagesPath },
   { label: 'Destinations', href: '/destinations-in-india' },
+  { label: 'India Trip', href: '/india' },
   { label: 'Services', href: '/#travel-experiences' },
   { label: 'About us', href: '/about' },
   { label: 'Contact', href: '/contact' },
@@ -98,6 +101,9 @@ function Header({ pathname }) {
           if (href === '/destinations-in-india') return (
             <DestinationMenu key={href} label={label} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
           )
+          if (href === '/india') return (
+            <IndiaMenu key={href} label={label} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
+          )
           return (
             <a key={href} href={href} aria-current={pathname === href ? 'page' : undefined}
               className={highlighted ? 'button button-dark nav-cta' : undefined}
@@ -108,9 +114,9 @@ function Header({ pathname }) {
         })}
       </nav>
       <div className="header-actions">
-        <a className="header-support" href="tel:+911140012345">
-          <Headphones size={17} aria-hidden="true" />
-          <span><small>Need a hand?</small><strong>+91 11 4001 2345</strong></span>
+        <a className="header-support" href={supportWhatsAppUrl} target="_blank" rel="noopener noreferrer">
+          <MessageCircle size={17} aria-hidden="true" />
+          <span><small>Chat on WhatsApp</small><strong>{supportWhatsAppNumber}</strong></span>
         </a>
         <a className="button button-orange header-booking" href="/contact">
           Book now <ArrowUpRight size={16} aria-hidden="true" />
@@ -141,8 +147,8 @@ function Footer() {
         <div className="footer-column">
           <h3>Say hello</h3>
           <a href="/contact">Plan a trip</a>
-          <a href="mailto:hello@royalyatra.com">hello@royalyatra.com</a>
-          <a href="tel:+911140012345">+91 11 4001 2345</a>
+          <a href={supportEmailUrl}>{supportEmail}</a>
+          <a href={supportWhatsAppUrl} target="_blank" rel="noopener noreferrer">WhatsApp {supportWhatsAppNumber}</a>
         </div>
         <div className="footer-note">
           <h3>Plan your journey</h3>
@@ -773,8 +779,11 @@ export function ContactPage({ search, apiUrl }) {
           <span className="eyebrow">WE'RE ALL EARS</span>
           <h2>What's on your<br /><em>mind?</em></h2>
           <p>Share a little about your trip and we'll take it from there.</p>
-          <div className="contact-detail"><span>EMAIL</span><a href="mailto:hello@royalyatra.com">hello@royalyatra.com</a></div>
-          <div className="contact-detail"><span>CALL US</span><a href="tel:+911140012345">+91 11 4001 2345</a></div>
+          <div className="contact-detail"><span>EMAIL</span><a href={supportEmailUrl}>{supportEmail}</a></div>
+          <div className="contact-detail">
+            <span>WHATSAPP</span>
+            <a href={supportWhatsAppUrl} target="_blank" rel="noopener noreferrer">Message us at {supportWhatsAppNumber}</a>
+          </div>
           <div className="contact-detail"><span>OFFICE HOURS</span><strong>Monday to Saturday, 9am&ndash;6pm IST</strong></div>
         </div>
         <form className="contact-form" onSubmit={submitEnquiry}>

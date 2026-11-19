@@ -5,11 +5,15 @@ function supportsHover(event) {
     window.matchMedia('(min-width: 1051px) and (hover: hover)').matches
 }
 
-export default function NavigationMenu({ label, id, active, activePanel, setActivePanel, children }) {
+export default function NavigationMenu({
+  label, id, active, activePanel, setActivePanel, children, keepOpenOnHoverClick = false,
+}) {
   const menu = useRef(null)
   const trigger = useRef(null)
+  const openedByHover = useRef(false)
   const open = activePanel === id
   const close = useCallback(() => {
+    openedByHover.current = false
     setActivePanel((panel) => panel === id ? null : panel)
   }, [id, setActivePanel])
 
@@ -28,7 +32,10 @@ export default function NavigationMenu({ label, id, active, activePanel, setActi
       className="navigation-menu"
       ref={menu}
       onPointerEnter={(event) => {
-        if (supportsHover(event)) setActivePanel(id)
+        if (!open && supportsHover(event)) {
+          openedByHover.current = true
+          setActivePanel(id)
+        }
       }}
       onPointerLeave={(event) => {
         if (supportsHover(event) && !event.currentTarget.contains(document.activeElement)) close()
@@ -51,7 +58,11 @@ export default function NavigationMenu({ label, id, active, activePanel, setActi
         data-active={active}
         aria-expanded={open}
         aria-controls={id}
-        onClick={() => setActivePanel((panel) => panel === id ? null : id)}
+        onClick={(event) => {
+          const keepOpen = keepOpenOnHoverClick && event.detail > 0 && openedByHover.current
+          openedByHover.current = false
+          setActivePanel((panel) => panel === id && !keepOpen ? null : id)
+        }}
       >
         {label} <span aria-hidden="true" />
       </button>
