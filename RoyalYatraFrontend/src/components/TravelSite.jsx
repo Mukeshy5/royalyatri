@@ -1,12 +1,28 @@
 import React from 'react'
+import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion'
+import ArrowDown from 'lucide-react/icons/arrow-down'
+import ArrowRight from 'lucide-react/icons/arrow-right'
+import ArrowUpRight from 'lucide-react/icons/arrow-up-right'
+import BadgeCheck from 'lucide-react/icons/badge-check'
+import CalendarDays from 'lucide-react/icons/calendar-days'
+import Check from 'lucide-react/icons/check'
+import ChevronRight from 'lucide-react/icons/chevron-right'
+import Compass from 'lucide-react/icons/compass'
+import Headphones from 'lucide-react/icons/headphones'
+import MapPin from 'lucide-react/icons/map-pin'
+import MessageCircle from 'lucide-react/icons/message-circle'
+import Plane from 'lucide-react/icons/plane'
+import Search from 'lucide-react/icons/search'
+import ShieldCheck from 'lucide-react/icons/shield-check'
+import Sparkles from 'lucide-react/icons/sparkles'
+import Users from 'lucide-react/icons/users'
 import { destinationRegionPath, destinationRegions } from '../seo/destinationDirectory.js'
+import HomeSupport from './HomeSupport.jsx'
 import DestinationMenu from './layout/DestinationMenu.jsx'
-import IndiaMenu from './layout/IndiaMenu.jsx'
 import TourPackageMenu from './layout/TourPackageMenu.jsx'
 import { TourPackageLinks } from './seo-pages/TourPackageLanding.jsx'
 import { featuredTourPackages } from '../seo/featuredTourPackages.js'
 import {
-  buddhistToursPath,
   findTravelPage,
   internationalDestinations,
   internationalPath,
@@ -16,23 +32,30 @@ import {
 } from '../seo/travelPages.js'
 
 const currentYear = new Date().getFullYear()
+const earliestTravelDate = new Date().toISOString().slice(0, 10)
 
 const navItems = [
   { label: 'Home', href: '/' },
+  { label: 'Packages', href: packagesPath },
+  { label: 'Destinations', href: '/destinations-in-india' },
+  { label: 'Services', href: '/#travel-experiences' },
   { label: 'About us', href: '/about' },
-  { label: 'Tour package', href: packagesPath },
-  { label: 'India', href: '/india' },
-  { label: 'Destinations in India', href: '/destinations-in-india' },
-  { label: 'Buddhist Tours', href: buddhistToursPath },
-  { label: 'Contact us', href: '/contact' },
-  { label: 'Online payment', href: onlinePaymentPath, highlighted: true },
+  { label: 'Contact', href: '/contact' },
 ]
 
 const destinations = [
-  { name: 'Rajasthan', detail: 'Palaces, desert skies & royal stays', image: 'photo-1477587458883-47145ed94245', href: '/destinations-in-india/rajasthan' },
-  { name: 'Kerala', detail: 'Slow days on the backwaters', image: 'photo-1602216056096-3b40cc0c9944', href: '/destinations-in-india/kerala' },
-  { name: 'Himachal', detail: 'Mountain air, made for wandering', image: 'photo-1626621341517-bbf3d9990a23', href: '/destinations-in-india/himachal-pradesh' },
-  { name: 'Agra', detail: 'A timeless wonder, up close', image: 'photo-1564507592333-c60657eea523', href: '/destinations-in-india/uttar-pradesh/agra' },
+  { name: 'Himachal Pradesh', detail: 'Snowy peaks & green valleys', image: 'photo-1626621341517-bbf3d9990a23', href: '/destinations-in-india/himachal-pradesh' },
+  { name: 'Kerala', detail: 'Backwaters & quiet houseboats', image: 'photo-1602216056096-3b40cc0c9944', href: '/destinations/kerala' },
+  { name: 'Goa', detail: 'Palm-lined shores & slow days', image: 'photo-1512343879784-a960bf40e7f2', href: '/destinations/goa' },
+  { name: 'Rajasthan', detail: 'Palaces, forts & desert skies', image: 'photo-1477587458883-47145ed94245', href: '/destinations-in-india/rajasthan' },
+  { name: 'Ladakh', detail: 'High passes & brilliant blue lakes', image: 'photo-1501785888041-af3ef285b470', href: '/contact?destination=Ladakh' },
+]
+
+const bookingCategories = [
+  { id: 'tours', label: 'Tours & packages', icon: Compass },
+  { id: 'flights', label: 'Flights', icon: Plane },
+  { id: 'hotels', label: 'Hotels', icon: Sparkles },
+  { id: 'holidays', label: 'Holiday packages', icon: MapPin },
 ]
 
 function imageUrl(id, width = 900) {
@@ -70,13 +93,10 @@ function Header({ pathname }) {
       <nav id="main-navigation" className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Main navigation">
         {navItems.map(({ label, href, highlighted }) => {
           if (href === packagesPath) return (
-            <TourPackageMenu key={href} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
-          )
-          if (href === '/india') return (
-            <IndiaMenu key={href} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
+            <TourPackageMenu key={href} label={label} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
           )
           if (href === '/destinations-in-india') return (
-            <DestinationMenu key={href} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
+            <DestinationMenu key={href} label={label} pathname={pathname} activePanel={activePanel} setActivePanel={setActivePanel} />
           )
           return (
             <a key={href} href={href} aria-current={pathname === href ? 'page' : undefined}
@@ -87,6 +107,15 @@ function Header({ pathname }) {
           )
         })}
       </nav>
+      <div className="header-actions">
+        <a className="header-support" href="tel:+911140012345">
+          <Headphones size={17} aria-hidden="true" />
+          <span><small>Need a hand?</small><strong>+91 11 4001 2345</strong></span>
+        </a>
+        <a className="button button-orange header-booking" href="/contact">
+          Book now <ArrowUpRight size={16} aria-hidden="true" />
+        </a>
+      </div>
     </header>
   )
 }
@@ -104,6 +133,9 @@ function Footer() {
           <a href="/destinations-in-india">Destinations</a>
           <a href={packagesPath}>India tour packages</a>
           <a href={internationalPath}>International tours</a>
+          <a href="/buddhist-tours-in-india">Buddhist tours</a>
+          <a href={onlinePaymentPath}>Online payment</a>
+          <a href="/india">Explore India</a>
           <a href="/about">Our story</a>
         </div>
         <div className="footer-column">
@@ -116,6 +148,10 @@ function Footer() {
           <h3>Plan your journey</h3>
           <p>Share your dates, destinations and the kind of trip you have in mind.</p>
           <a className="text-link" href="/contact">Start an enquiry <Arrow /></a>
+          <div className="footer-travel-tags" aria-label="Travel styles">
+            <a href="/packages/category/family">Family trips</a>
+            <a href="/packages/category/luxury">Luxury escapes</a>
+          </div>
         </div>
       </div>
       <div className="footer-bottom">
@@ -197,27 +233,73 @@ function TourGrid({ tours, error, loading, limit }) {
 }
 
 function SearchBar() {
+  const [category, setCategory] = React.useState('tours')
+  const [destination, setDestination] = React.useState('')
+  const [date, setDate] = React.useState('')
+  const [travellers, setTravellers] = React.useState('2')
+
+  function searchTrips(event) {
+    event.preventDefault()
+    const params = new URLSearchParams()
+    if (destination) params.set('destination', destination)
+    if (date) params.set('date', date)
+    params.set('travellers', travellers)
+
+    if (category === 'flights' || category === 'hotels') {
+      const request = category === 'flights' ? 'Flight planning assistance' : 'Hotel planning assistance'
+      params.set('request', request)
+      window.location.assign('/contact?' + params.toString())
+      return
+    }
+
+    window.location.assign(packagesPath + '?' + params.toString())
+  }
+
   return (
-    <form className="search-bar" action={packagesPath} method="get">
-      <label className="search-field">
-        <span>Destination</span>
-        <select name="destination">
-          <option value="">All destinations</option>
-          {destinations.map(({ name }) => <option key={name}>{name}</option>)}
-        </select>
-      </label>
-      <label className="search-field">
-        <span>Travel month</span>
-        <input type="month" name="month" />
-      </label>
-      <label className="search-field">
-        <span>Travellers</span>
-        <select name="travellers" defaultValue="2 travellers">
-          <option>1 traveller</option><option>2 travellers</option><option>3 travellers</option><option>4+ travellers</option>
-        </select>
-      </label>
-      <button className="button button-dark search-submit" type="submit">Find my trip <Arrow /></button>
-    </form>
+    <div className="search-panel">
+      <div className="booking-tabs" role="tablist" aria-label="What are you planning?">
+        {bookingCategories.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            id={'booking-tab-' + id}
+            className={category === id ? 'booking-tab is-active' : 'booking-tab'}
+            type="button"
+            role="tab"
+            aria-selected={category === id}
+            aria-controls="booking-search"
+            onClick={() => setCategory(id)}
+          >
+            <Icon size={17} aria-hidden="true" /> {label}
+          </button>
+        ))}
+      </div>
+      <form className="search-bar" id="booking-search" role="tabpanel" aria-labelledby={'booking-tab-' + category} onSubmit={searchTrips}>
+        <label className="search-field">
+          <span><MapPin size={15} aria-hidden="true" /> Destination</span>
+          <select name="destination" value={destination} onChange={(event) => setDestination(event.target.value)} required>
+            <option value="" disabled>Where would you like to go?</option>
+            {destinations.map(({ name }) => <option key={name} value={name}>{name}</option>)}
+          </select>
+        </label>
+        <label className="search-field">
+          <span><CalendarDays size={15} aria-hidden="true" /> Travel date</span>
+          <input type="date" name="date" min={earliestTravelDate} value={date} onChange={(event) => setDate(event.target.value)} />
+        </label>
+        <label className="search-field">
+          <span><Users size={15} aria-hidden="true" /> Travellers</span>
+          <select name="travellers" value={travellers} onChange={(event) => setTravellers(event.target.value)}>
+            <option value="1">1 traveller</option>
+            <option value="2">2 travellers</option>
+            <option value="3">3 travellers</option>
+            <option value="4">4 travellers</option>
+            <option value="5">5+ travellers</option>
+          </select>
+        </label>
+        <button className="button button-orange search-submit" type="submit">
+          <Search size={18} aria-hidden="true" /> Search
+        </button>
+      </form>
+    </div>
   )
 }
 
@@ -252,78 +334,274 @@ function FeaturedPackageCards() {
   )
 }
 
-export function HomePage({ tours }) {
-  const goa = findTravelPage('/destinations/goa/south-goa')
+const travelExperiences = [
+  { title: 'Mountain adventures', copy: 'Follow highland trails, hill towns and open Himalayan skies.', image: 'photo-1464822759023-fed622ff2c3b', href: '/destinations-in-india/himachal-pradesh' },
+  { title: 'Coastal slow living', copy: 'Trade the clock for warm water, local food and easy-going shores.', image: 'photo-1512343879784-a960bf40e7f2', href: '/destinations/goa' },
+  { title: 'A touch of royal', copy: 'Take the long way through Rajasthan’s forts, palaces and old cities.', image: 'photo-1477587458883-47145ed94245', href: '/destinations-in-india/rajasthan' },
+]
+
+const seasonalJourneys = [
+  { title: 'Himalayan hideaways', season: 'For crisp mountain air', image: 'photo-1626621341517-bbf3d9990a23', destination: 'Himachal Pradesh' },
+  { title: 'Kerala, by water', season: 'For slower days', image: 'photo-1602216056096-3b40cc0c9944', destination: 'Kerala' },
+  { title: 'The Goa coastline', season: 'For sea-side escapes', image: 'photo-1512343879784-a960bf40e7f2', destination: 'Goa' },
+]
+
+const galleryImages = [
+  { image: 'photo-1477587458883-47145ed94245', alt: 'Historic palace architecture in Rajasthan' },
+  { image: 'photo-1602216056096-3b40cc0c9944', alt: 'A boat on Kerala backwaters' },
+  { image: 'photo-1512343879784-a960bf40e7f2', alt: 'Palm-lined beach in Goa' },
+  { image: 'photo-1626621341517-bbf3d9990a23', alt: 'Mountain scenery in Himachal Pradesh' },
+  { image: 'photo-1564507592333-c60657eea523', alt: 'The Taj Mahal in Agra' },
+]
+
+function NewsletterSignup({ apiUrl }) {
+  const [status, setStatus] = React.useState('idle')
+  const [message, setMessage] = React.useState('')
+
+  async function subscribe(event) {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    setStatus('submitting')
+    setMessage('')
+
+    try {
+      const response = await fetch(apiUrl + '/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.get('name'),
+          email: formData.get('email'),
+          message: 'Newsletter subscription request. The traveller explicitly opted in to receive occasional travel updates.',
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.message || 'We could not submit your request. Please try again.')
+      setStatus('success')
+      setMessage('Thanks — your request has been recorded.')
+      form.reset()
+    } catch (error) {
+      setStatus('error')
+      setMessage(error.message || 'We could not reach our travel team. Please try again.')
+    }
+  }
 
   return (
-    <>
-      <div className="home-intro">
-        <section className="home-hero" aria-labelledby="hero-title">
-          <div className="home-hero-copy">
-            <p className="eyebrow">TAILOR-MADE TRAVEL IN INDIA</p>
-            <h1 id="hero-title">India, at your <br /><em>own pace.</em></h1>
-            <p className="home-hero-description">From the palace cities of Rajasthan to the quiet lanes of the Himalayas, plan a journey around the places and experiences that matter to you.</p>
-            <div className="home-hero-actions">
-              <a className="button button-orange" href={packagesPath}>Explore India tours <Arrow /></a>
-              <a className="text-link" href="/contact">Plan a private trip <Arrow diagonal /></a>
-            </div>
-          </div>
-          <figure className="home-hero-media">
-            <img src="/amber-fort-hero.png" alt="Amber Fort above its lakeside gardens at sunset" width="1774" height="887" fetchPriority="high" />
-            <figcaption><a href="/destinations/jaipur/amber-fort">Amber Fort, Jaipur <Arrow diagonal /></a></figcaption>
-          </figure>
-        </section>
-        <section className="search-wrap" aria-label="Find a trip">
-          <SearchBar />
-        </section>
+    <section className="coastal-newsletter">
+      <div className="newsletter-copy">
+        <span className="eyebrow">A LITTLE INSPIRATION, NOW AND THEN</span>
+        <h2>Good journeys<br /><em>start with a note.</em></h2>
+        <p>Request occasional travel inspiration and hear from us about newsletter availability.</p>
+        <p className="newsletter-disclosure">Requests are recorded through our enquiry service; there is no automated mailing list yet.</p>
       </div>
+      <form className="newsletter-form" onSubmit={subscribe}>
+        <label>Your name<input name="name" autoComplete="name" required minLength="2" maxLength="80" placeholder="How should we address you?" /></label>
+        <label>Email address<input name="email" type="email" autoComplete="email" required maxLength="254" placeholder="you@example.com" /></label>
+        <label className="newsletter-consent"><input name="consent" type="checkbox" required /> <span>I’m happy for Royal Yatra to contact me about travel updates.</span></label>
+        {message && <p className={'form-message form-message-' + (status === 'error' ? 'error' : 'success')} role="status">{message}</p>}
+        <button className="button button-orange" type="submit" disabled={status === 'submitting'}>
+          {status === 'submitting' ? 'Sending request…' : 'Request updates'} <ArrowRight size={17} aria-hidden="true" />
+        </button>
+      </form>
+    </section>
+  )
+}
 
-      <section className="section home-packages">
-        <SectionHeading title="Featured tour packages" copy="Explore the route and day-by-day plan before you request a quote." link="All tour packages" href={packagesPath} />
-        <FeaturedPackageCards />
+function HomeFaqSection() {
+  return (
+    <section className="section coastal-faq" id="faqs">
+      <div className="faq-heading">
+        <span className="eyebrow">GOOD TO KNOW</span>
+        <h2>A few things you might wonder.</h2>
+        <p>Need a hand with something else? <a href="/contact">Talk to our travel team.</a></p>
+      </div>
+      <div className="faq-list">
+        {faqs.slice(0, 4).map(([question, answer]) => (
+          <details key={question}>
+            <summary>{question}<ChevronRight size={18} aria-hidden="true" /></summary>
+            <p>{answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+export function HomePage({ tours, error, loading, apiUrl = '/api' }) {
+  const reduceMotion = useReducedMotion()
+  const revealProps = reduceMotion ? {} : {
+    initial: { opacity: 0, y: 22 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.14 },
+    transition: { duration: 0.55, ease: 'easeOut' },
+  }
+  const trustPoints = [
+    { icon: ShieldCheck, title: 'Thoughtful planning', copy: 'Trips shaped around what matters to you.' },
+    { icon: Headphones, title: 'Real people, here to help', copy: 'Speak directly with our trip-planning team.' },
+    { icon: BadgeCheck, title: 'Clear trip details', copy: 'Know what is included before you enquire.' },
+    { icon: Sparkles, title: 'Made for discovery', copy: 'Find the places and moments beyond the obvious.' },
+  ]
+
+  return (
+    <LazyMotion features={domAnimation}>
+      <div className="coastal-home">
+      <section className="coastal-hero" aria-labelledby="hero-title">
+        <img className="coastal-hero-image" src={imageUrl('photo-1551632811-561732d1e306', 2000)} alt="Travellers walking together through a dramatic mountain landscape" fetchPriority="high" />
+        <div className="coastal-hero-content">
+          <m.div {...revealProps}>
+            <span className="coastal-hero-badge"><Sparkles size={14} aria-hidden="true" /> TRAVEL <i /> EXPLORE <i /> DISCOVER</span>
+            <p className="coastal-hero-kicker">The world, on your terms</p>
+            <h1 id="hero-title">Explore the world<br /><em>with us.</em></h1>
+            <p className="coastal-hero-description">Discover remarkable places, thoughtfully made journeys and the little moments you’ll remember long after you’re home.</p>
+            <div className="home-hero-actions">
+              <a className="button button-orange" href={packagesPath}>Find your journey <ArrowUpRight size={17} aria-hidden="true" /></a>
+              <a className="coastal-hero-link" href="/destinations-in-india">Explore destinations <ArrowDown size={16} aria-hidden="true" /></a>
+            </div>
+          </m.div>
+        </div>
+        <div className="coastal-hero-note"><MapPin size={15} aria-hidden="true" /> The Himalayas, India</div>
       </section>
 
-      <section className="section home-destinations">
+      <section className="search-wrap coastal-search-wrap" aria-label="Find a trip">
+        <SearchBar />
+      </section>
+
+      <HomeSupport />
+
+      <section className="coastal-trust" aria-label="What to expect">
+        {trustPoints.map(({ icon: Icon, title, copy }) => (
+          <div className="coastal-trust-item" key={title}>
+            <span className="coastal-trust-icon"><Icon size={22} strokeWidth={1.8} aria-hidden="true" /></span>
+            <span><strong>{title}</strong><small>{copy}</small></span>
+          </div>
+        ))}
+      </section>
+
+      <m.section className="section coastal-destinations" {...revealProps} id="destinations">
+        <SectionHeading eyebrow="PLACES THAT STAY WITH YOU" title="Popular destinations" copy="Handpicked places for your next unforgettable journey." link="Explore every destination" href="/destinations-in-india" />
+        <div className="coastal-destination-grid">
+          {destinations.map((place, index) => (
+            <m.a className={'coastal-destination-card coastal-destination-card-' + (index + 1)} href={place.href} key={place.name}
+              whileHover={reduceMotion ? undefined : { y: -5 }} transition={{ duration: 0.2 }}>
+              <img src={imageUrl(place.image, 900)} alt={place.name + ': ' + place.detail} loading="lazy" />
+              <span className="coastal-destination-overlay">
+                <span className="coastal-destination-location"><MapPin size={13} aria-hidden="true" /> India</span>
+                <strong>{place.name}</strong>
+                <small>{place.detail}</small>
+                <span className="coastal-destination-arrow"><ArrowUpRight size={17} aria-hidden="true" /></span>
+              </span>
+            </m.a>
+          ))}
+        </div>
+      </m.section>
+
+      <m.section className="section home-packages coastal-packages" {...revealProps} id="packages">
+        <SectionHeading eyebrow="MADE FOR YOUR NEXT GREAT STORY" title="Featured tour packages" copy="Explore the route and day-by-day plan before you request a quote." link="All tour packages" href={packagesPath} />
+        <FeaturedPackageCards />
+      </m.section>
+
+      <section className="section coastal-live-catalogue">
+        <SectionHeading eyebrow="MORE WAYS TO GET AWAY" title="Journeys from our catalogue" copy="Browse available itineraries, then ask our team about dates and a tailored quote." link="View all packages" href={packagesPath} />
+        <TourGrid tours={tours} error={error} loading={loading} limit={3} />
+      </section>
+
+      <m.section className="section coastal-experiences" {...revealProps} id="travel-experiences">
+        <SectionHeading eyebrow="FIND YOUR KIND OF ADVENTURE" title="Travel your way" copy="From mountain trails to slow afternoons by the sea, choose the feeling you want to take home." />
+        <div className="coastal-experience-grid">
+          {travelExperiences.map((experience) => (
+            <a className="coastal-experience-card" href={experience.href} key={experience.title}>
+              <img src={imageUrl(experience.image, 880)} alt="" loading="lazy" />
+              <span className="coastal-experience-copy"><small>THE EXPERIENCE</small><strong>{experience.title}</strong><span>{experience.copy}</span><b>Explore this journey <ArrowUpRight size={15} aria-hidden="true" /></b></span>
+            </a>
+          ))}
+        </div>
+      </m.section>
+
+      <m.section className="section home-destinations coastal-regions" {...revealProps}>
         <figure className="home-destination-spotlight">
-          <a className="home-destination-photo" href={goa.path}>
-            <img src={goa.heroImage} alt={goa.heroAlt} loading="lazy" />
-            <span>Palolem Beach, Goa <Arrow diagonal /></span>
+          <a className="home-destination-photo" href="/destinations/goa/south-goa">
+            <img src="/images/seo/palolem.jpg" alt="Palolem Beach on Goa’s palm-fringed coastline" loading="lazy" />
+            <span>Palolem Beach, Goa <ArrowUpRight size={15} aria-hidden="true" /></span>
           </a>
-          <PhotoCredit credit={goa.heroCredit} className="home-destination-credit" />
         </figure>
         <div className="home-destination-copy">
-          <h2>Explore India <br /><em>by region.</em></h2>
+          <span className="eyebrow">ONE COUNTRY, MANY WORLDS</span>
+          <h2>Explore India<br /><em>by region.</em></h2>
           <nav className="home-region-links" aria-label="Regions of India">
             {destinationRegions.map((region) => (
-              <a key={region.slug} href={destinationRegionPath(region)}>{region.name}<Arrow diagonal /></a>
+              <a key={region.slug} href={destinationRegionPath(region)}>{region.name}<ArrowUpRight size={15} aria-hidden="true" /></a>
             ))}
           </nav>
           <a className="text-link" href="/destinations-in-india">See all destinations <Arrow /></a>
         </div>
+      </m.section>
+
+      <section className="section coastal-why" id="why-royal-yatra">
+        <SectionHeading eyebrow="THE ROYAL YATRA DIFFERENCE" title="Travel, with the details taken care of." copy="A little local insight and a lot of thoughtful planning make room for the moments that matter." />
+        <div className="coastal-why-grid">
+          <article><span><MapPin size={21} aria-hidden="true" /></span><h3>Local perspective</h3><p>Thoughtful recommendations help you connect with the places and people you meet.</p></article>
+          <article><span><Check size={21} aria-hidden="true" /></span><h3>Clear from the start</h3><p>Review your itinerary and trip details before you decide what works for you.</p></article>
+          <article><span><Headphones size={21} aria-hidden="true" /></span><h3>Personal support</h3><p>Talk through your plans with a real person who can help shape your journey.</p></article>
+        </div>
       </section>
 
-      {tours.length > 0 && (
-        <section className="section tours-section">
-          <SectionHeading title="More from the tour catalogue" link="Browse all tours" href={packagesPath} />
-          <TourGrid tours={tours} limit={3} />
-        </section>
-      )}
+      <m.section className="section coastal-offers" {...revealProps} id="seasonal-journeys">
+        <SectionHeading eyebrow="A GOOD TIME TO GET AWAY" title="Seasonal journey ideas" copy="A few ways to make the most of your next escape. Ask us about dates and availability." />
+        <div className="coastal-offer-grid">
+          {seasonalJourneys.map((journey) => (
+            <a className="coastal-offer-card" href={'/contact?destination=' + encodeURIComponent(journey.destination) + '&request=' + encodeURIComponent('Ask about seasonal travel dates')} key={journey.title}>
+              <img src={imageUrl(journey.image, 800)} alt="" loading="lazy" />
+              <span className="coastal-offer-copy"><small>{journey.season}</small><strong>{journey.title}</strong><span>Ask about availability <ArrowUpRight size={15} aria-hidden="true" /></span></span>
+            </a>
+          ))}
+        </div>
+      </m.section>
 
-      <section className="section international-showcase">
+      <section className="section international-showcase coastal-international">
         <div>
-          <h2>Explore beyond India</h2>
-          <p>Find your next destination in Asia, the Middle East or Europe.</p>
-          <a className="button button-light" href={internationalPath}>International tours <Arrow /></a>
+          <span className="eyebrow">FURTHER AFIELD</span>
+          <h2>There’s more out there.</h2>
+          <p>Find your next destination across Asia, the Middle East or Europe.</p>
+          <a className="button button-light" href={internationalPath}>Explore international tours <ArrowRight size={16} aria-hidden="true" /></a>
         </div>
         <div className="world-destinations">
           {internationalDestinations.map((place) => (
-            <a href={place.path} key={place.path}><span>{place.title}</span><Arrow diagonal /></a>
+            <a href={place.path} key={place.path}><span>{place.title}</span><ArrowUpRight size={16} aria-hidden="true" /></a>
           ))}
         </div>
       </section>
 
-      <Callout />
-    </>
+      <m.section className="section coastal-testimonials" {...revealProps} id="traveller-stories">
+        <div className="coastal-testimonial-intro">
+          <span className="eyebrow">TRAVELLER STORIES</span>
+          <h2>Your journey<br /><em>could be next.</em></h2>
+          <p>We’re gathering verified guest feedback before publishing reviews. Have travelled with us? We’d love to hear from you.</p>
+          <a className="text-link" href="/contact?request=Share%20traveller%20feedback">Share your experience <Arrow /></a>
+        </div>
+        <div className="coastal-testimonial-note">
+          <div className="coastal-story-icon"><MessageCircle size={25} aria-hidden="true" /></div>
+          <p>Every trip has a story. We’ll share our guests’ words here as soon as they’re ready.</p>
+          <span>Real experiences, shared with permission.</span>
+        </div>
+      </m.section>
+
+      <section className="section coastal-gallery">
+        <SectionHeading eyebrow="A GLIMPSE OF WHAT’S OUT THERE" title="Postcards from the road" copy="A little inspiration from places you could soon call your own." link="Browse destinations" href="/destinations-in-india" />
+        <div className="coastal-gallery-grid">
+          {galleryImages.map((item) => (
+            <a href="/destinations-in-india" key={item.image} aria-label={item.alt}>
+              <img src={imageUrl(item.image, 700)} alt={item.alt} loading="lazy" />
+              <span><ArrowUpRight size={18} aria-hidden="true" /></span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <HomeFaqSection />
+      <NewsletterSignup apiUrl={apiUrl} />
+        <Callout />
+      </div>
+    </LazyMotion>
   )
 }
 
@@ -372,14 +650,19 @@ const packageTopicPaths = new Set([...priorityTourPackagePages, ...featuredTourP
 
 export function ToursPage({ tours, error, loading, search }) {
   const destination = search.get('destination')
+  const normalizedDestination = destination?.trim().toLowerCase()
   const visibleTours = destination
-    ? tours.filter((tour) => (tour.region + ' ' + tour.name).toLowerCase().includes(destination.toLowerCase()))
+    ? tours.filter((tour) => {
+      const details = (tour.region + ' ' + tour.name).toLowerCase()
+      return details.includes(normalizedDestination) ||
+        normalizedDestination.split(/\s+/).some((term) => term.length > 3 && details.includes(term))
+    })
     : tours
   const page = findTravelPage(packagesPath)
   const relatedTrips = page.links.filter((path) => !packageTopicPaths.has(path)).map(findTravelPage)
   const enquiryQuery = new URLSearchParams()
 
-  for (const field of ['destination', 'month', 'travellers']) {
+  for (const field of ['destination', 'month', 'date', 'travellers', 'request']) {
     const value = search.get(field)
     if (value) enquiryQuery.set(field, value)
   }
@@ -443,6 +726,7 @@ export function AboutPage() {
 
 export function ContactPage({ search, apiUrl }) {
   const destination = search.get('destination')?.trim().slice(0, 100) || ''
+  const email = search.get('email')?.trim().slice(0, 254) || ''
   const places = [...new Set([
     ...destinations.map(({ name }) => name),
     ...internationalDestinations.map(({ title }) => title),
@@ -452,6 +736,7 @@ export function ContactPage({ search, apiUrl }) {
     ['Request', search.get('request')],
     ['Tour', search.get('tour')],
     ['Preferred month', search.get('month')],
+    ['Travel date', search.get('date')],
     ['Travellers', search.get('travellers')],
   ].filter(([, value]) => value).map(([label, value]) => label + ' - ' + value.slice(0, 160)).join('\n')
   const [status, setStatus] = React.useState('idle')
@@ -495,7 +780,7 @@ export function ContactPage({ search, apiUrl }) {
         <form className="contact-form" onSubmit={submitEnquiry}>
           <div className="form-row">
             <label>Your name<input name="name" autoComplete="name" required minLength="2" maxLength="80" placeholder="How should we call you?" /></label>
-            <label>Email address<input name="email" type="email" autoComplete="email" required maxLength="254" placeholder="you@example.com" /></label>
+            <label>Email address<input name="email" type="email" autoComplete="email" defaultValue={email} required maxLength="254" placeholder="you@example.com" /></label>
           </div>
           <div className="form-row">
             <label>Phone number <span className="optional">(optional)</span><input name="phone" type="tel" autoComplete="tel" maxLength="24" placeholder="+91 98765 43210" /></label>

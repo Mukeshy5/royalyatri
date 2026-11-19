@@ -12,12 +12,12 @@ const destinationGroups = destinationRegions.map((region) => {
   }
 })
 
-export default function DestinationMenu({ pathname, activePanel, setActivePanel }) {
+export default function DestinationMenu({ pathname, activePanel, setActivePanel, label = 'Destinations in India' }) {
   const active = pathname.startsWith('/destinations/') ||
     pathname === directoryPath || pathname.startsWith(directoryPath + '/')
 
   return (
-    <NavigationMenu label="Destinations in India" id="destination-navigation" active={active}
+    <NavigationMenu label={label} id="destination-navigation" active={active}
       activePanel={activePanel} setActivePanel={setActivePanel}
     >
       <a className="navigation-menu-directory" href={directoryPath}

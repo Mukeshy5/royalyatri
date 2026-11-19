@@ -81,7 +81,7 @@ export default function App() {
   return (
     <SiteLayout pathname={pathname}>
       <Routes>
-        <Route path="/" element={<HomePage {...tourResults} />} />
+        <Route path="/" element={<HomePage {...tourResults} apiUrl={apiUrl} />} />
         <Route path={packagesPath} caseSensitive element={<ToursPage {...tourResults} search={search} />} />
         <Route path="/about" caseSensitive element={<AboutPage />} />
         <Route path="/contact" caseSensitive element={<ContactPage key={location.search} search={search} apiUrl={apiUrl} />} />
