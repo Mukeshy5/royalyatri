@@ -1,7 +1,4 @@
 import React from 'react'
-import ArrowUpRight from 'lucide-react/icons/arrow-up-right'
-import MessageCircle from 'lucide-react/icons/message-circle'
-import X from 'lucide-react/icons/x'
 
 const supportLinks = [
   { id: 'whatsapp', label: 'WhatsApp', href: 'https://wa.me/919899241803' },
@@ -32,30 +29,21 @@ const supportIcons = {
 }
 
 export default function HomeSupport() {
-  function closeOnEscape(event) {
-    const popup = event.currentTarget
-    if (event.key !== 'Escape' || !popup.open) return
-
-    popup.open = false
-    popup.firstElementChild.focus()
-  }
-
   return (
-    <details className="home-support" onKeyDown={closeOnEscape}>
-      <summary className="home-support-toggle">
-        <MessageCircle className="home-support-chat-icon" size={19} aria-hidden="true" />
-        <X className="home-support-close-icon" size={19} aria-hidden="true" />
-        Support
-      </summary>
-      <nav className="home-support-links" aria-label="Support channels">
-        {supportLinks.map(({ id, label, href }) => (
-          <a className="home-support-link" key={id} href={href} target="_blank" rel="noopener noreferrer">
-            <span className={'home-support-icon home-support-icon-' + id}>{supportIcons[id]}</span>
-            <span>{label}</span>
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </a>
-        ))}
-      </nav>
-    </details>
+    <nav className="home-support" aria-label="Social links">
+      {supportLinks.map(({ id, label, href }) => (
+        <a
+          key={id}
+          className={'home-support-link home-support-link-' + id}
+          href={href}
+          aria-label={label}
+          title={label}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {supportIcons[id]}
+        </a>
+      ))}
+    </nav>
   )
 }
